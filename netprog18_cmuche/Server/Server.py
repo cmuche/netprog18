@@ -1,1 +1,0 @@
-print("NETPROG 18 SERVER")

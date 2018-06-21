@@ -1,0 +1,1 @@
+..\tools\thrift-0.11.0 --gen py thinservice.thrift
