@@ -1,6 +1,5 @@
 from ThinService.Common import Constants
 
-from ThinService.Server.RequestHandler import RequestHandler
 from netprog18 import ThinService
 
 from thrift.transport import TSocket
@@ -10,11 +9,11 @@ from thrift.server import TServer
 
 
 class ServerService:
-    def __init__(self, requestHandler):
-        self.requestHandler = requestHandler
+    def __init__(self, serverLogic):
+        self.serverLogic = serverLogic
 
     def startServer(self):
-        processor = ThinService.Processor(self.requestHandler)
+        processor = ThinService.Processor(self.serverLogic)
         serverSocket = TSocket.TServerSocket(Constants.SERVER_HOST, Constants.SERVER_PORT)
         transportFactory = TTransport.TBufferedTransportFactory()
         protocolFactory = TBinaryProtocol.TBinaryProtocolFactory()
