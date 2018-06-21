@@ -6,9 +6,8 @@ from thrift.protocol import TBinaryProtocol
 from thrift.server import TServer
 
 class ThinServiceHandler:
-    def foobar(self):
-        print('foobar')
-        return 42
+    def hello(self, clientInfo):
+        print(clientInfo)
 
 print("CREATING SERVER")
 handler = ThinServiceHandler()

@@ -19,7 +19,11 @@ all_structs = []
 
 
 class Iface(object):
-    def foobar(self):
+    def hello(self, clientInfo):
+        """
+        Parameters:
+         - clientInfo
+        """
         pass
 
 
@@ -30,18 +34,23 @@ class Client(Iface):
             self._oprot = oprot
         self._seqid = 0
 
-    def foobar(self):
-        self.send_foobar()
-        return self.recv_foobar()
+    def hello(self, clientInfo):
+        """
+        Parameters:
+         - clientInfo
+        """
+        self.send_hello(clientInfo)
+        self.recv_hello()
 
-    def send_foobar(self):
-        self._oprot.writeMessageBegin('foobar', TMessageType.CALL, self._seqid)
-        args = foobar_args()
+    def send_hello(self, clientInfo):
+        self._oprot.writeMessageBegin('hello', TMessageType.CALL, self._seqid)
+        args = hello_args()
+        args.clientInfo = clientInfo
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
 
-    def recv_foobar(self):
+    def recv_hello(self):
         iprot = self._iprot
         (fname, mtype, rseqid) = iprot.readMessageBegin()
         if mtype == TMessageType.EXCEPTION:
@@ -49,19 +58,17 @@ class Client(Iface):
             x.read(iprot)
             iprot.readMessageEnd()
             raise x
-        result = foobar_result()
+        result = hello_result()
         result.read(iprot)
         iprot.readMessageEnd()
-        if result.success is not None:
-            return result.success
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "foobar failed: unknown result")
+        return
 
 
 class Processor(Iface, TProcessor):
     def __init__(self, handler):
         self._handler = handler
         self._processMap = {}
-        self._processMap["foobar"] = Processor.process_foobar
+        self._processMap["hello"] = Processor.process_hello
 
     def process(self, iprot, oprot):
         (name, type, seqid) = iprot.readMessageBegin()
@@ -78,13 +85,13 @@ class Processor(Iface, TProcessor):
             self._processMap[name](self, seqid, iprot, oprot)
         return True
 
-    def process_foobar(self, seqid, iprot, oprot):
-        args = foobar_args()
+    def process_hello(self, seqid, iprot, oprot):
+        args = hello_args()
         args.read(iprot)
         iprot.readMessageEnd()
-        result = foobar_result()
+        result = hello_result()
         try:
-            result.success = self._handler.foobar()
+            self._handler.hello(args.clientInfo)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -96,7 +103,7 @@ class Processor(Iface, TProcessor):
             logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("foobar", msg_type, seqid)
+        oprot.writeMessageBegin("hello", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
@@ -104,58 +111,15 @@ class Processor(Iface, TProcessor):
 # HELPER FUNCTIONS AND STRUCTURES
 
 
-class foobar_args(object):
-
-
-    def read(self, iprot):
-        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
-            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
-            return
-        iprot.readStructBegin()
-        while True:
-            (fname, ftype, fid) = iprot.readFieldBegin()
-            if ftype == TType.STOP:
-                break
-            else:
-                iprot.skip(ftype)
-            iprot.readFieldEnd()
-        iprot.readStructEnd()
-
-    def write(self, oprot):
-        if oprot._fast_encode is not None and self.thrift_spec is not None:
-            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
-            return
-        oprot.writeStructBegin('foobar_args')
-        oprot.writeFieldStop()
-        oprot.writeStructEnd()
-
-    def validate(self):
-        return
-
-    def __repr__(self):
-        L = ['%s=%r' % (key, value)
-             for key, value in self.__dict__.items()]
-        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-    def __eq__(self, other):
-        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-    def __ne__(self, other):
-        return not (self == other)
-all_structs.append(foobar_args)
-foobar_args.thrift_spec = (
-)
-
-
-class foobar_result(object):
+class hello_args(object):
     """
     Attributes:
-     - success
+     - clientInfo
     """
 
 
-    def __init__(self, success=None,):
-        self.success = success
+    def __init__(self, clientInfo=None,):
+        self.clientInfo = clientInfo
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -166,9 +130,10 @@ class foobar_result(object):
             (fname, ftype, fid) = iprot.readFieldBegin()
             if ftype == TType.STOP:
                 break
-            if fid == 0:
-                if ftype == TType.I32:
-                    self.success = iprot.readI32()
+            if fid == 1:
+                if ftype == TType.STRUCT:
+                    self.clientInfo = ClientInfo()
+                    self.clientInfo.read(iprot)
                 else:
                     iprot.skip(ftype)
             else:
@@ -180,10 +145,10 @@ class foobar_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('foobar_result')
-        if self.success is not None:
-            oprot.writeFieldBegin('success', TType.I32, 0)
-            oprot.writeI32(self.success)
+        oprot.writeStructBegin('hello_args')
+        if self.clientInfo is not None:
+            oprot.writeFieldBegin('clientInfo', TType.STRUCT, 1)
+            self.clientInfo.write(oprot)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -201,9 +166,53 @@ class foobar_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(foobar_result)
-foobar_result.thrift_spec = (
-    (0, TType.I32, 'success', None, None, ),  # 0
+all_structs.append(hello_args)
+hello_args.thrift_spec = (
+    None,  # 0
+    (1, TType.STRUCT, 'clientInfo', [ClientInfo, None], None, ),  # 1
+)
+
+
+class hello_result(object):
+
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('hello_result')
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(hello_result)
+hello_result.thrift_spec = (
 )
 fix_spec(all_structs)
 del all_structs

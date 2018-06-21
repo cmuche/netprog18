@@ -24,7 +24,7 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
     print('Usage: ' + sys.argv[0] + ' [-h host[:port]] [-u url] [-f[ramed]] [-s[sl]] [-novalidate] [-ca_certs certs] [-keyfile keyfile] [-certfile certfile] function [arg1 [arg2...]]')
     print('')
     print('Functions:')
-    print('  int foobar()')
+    print('  void hello(ClientInfo clientInfo)')
     print('')
     sys.exit(0)
 
@@ -104,11 +104,11 @@ protocol = TBinaryProtocol(transport)
 client = ThinService.Client(protocol)
 transport.open()
 
-if cmd == 'foobar':
-    if len(args) != 0:
-        print('foobar requires 0 args')
+if cmd == 'hello':
+    if len(args) != 1:
+        print('hello requires 1 args')
         sys.exit(1)
-    pp.pprint(client.foobar())
+    pp.pprint(client.hello(eval(args[0]),))
 
 else:
     print('Unrecognized method %s' % cmd)
