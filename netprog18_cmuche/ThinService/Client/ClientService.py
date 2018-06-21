@@ -1,3 +1,6 @@
+import random
+import sys
+
 from ThinService.Common import Constants
 from netprog18 import ThinService
 
@@ -7,6 +10,9 @@ from thrift.protocol import TBinaryProtocol
 
 
 class ClientConnector:
+    def __init__(self):
+        self.id = random.randint(0, 2147483647)
+
     def connectToServer(self):
         self.transport = TSocket.TSocket(Constants.SERVER_HOST, Constants.SERVER_PORT)
         self.transport = TTransport.TBufferedTransport(self.transport)
@@ -18,4 +24,4 @@ class ClientConnector:
         self.transport.close()
 
     def login(self, clientInfo):
-        self.client.hello(clientInfo)
+        self.client.hello(self.id, clientInfo)

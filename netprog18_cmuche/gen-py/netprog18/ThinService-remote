@@ -24,7 +24,12 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
     print('Usage: ' + sys.argv[0] + ' [-h host[:port]] [-u url] [-f[ramed]] [-s[sl]] [-novalidate] [-ca_certs certs] [-keyfile keyfile] [-certfile certfile] function [arg1 [arg2...]]')
     print('')
     print('Functions:')
-    print('  void hello(ClientInfo clientInfo)')
+    print('   listClients()')
+    print('  ClientInfo show(int clientId)')
+    print('  void hello(int clientId, ClientInfo clientInfo)')
+    print('  void alive(int clientId)')
+    print('   update(int clientId)')
+    print('  void upgrade(int clientId, int packageId)')
     print('')
     sys.exit(0)
 
@@ -104,11 +109,41 @@ protocol = TBinaryProtocol(transport)
 client = ThinService.Client(protocol)
 transport.open()
 
-if cmd == 'hello':
-    if len(args) != 1:
-        print('hello requires 1 args')
+if cmd == 'listClients':
+    if len(args) != 0:
+        print('listClients requires 0 args')
         sys.exit(1)
-    pp.pprint(client.hello(eval(args[0]),))
+    pp.pprint(client.listClients())
+
+elif cmd == 'show':
+    if len(args) != 1:
+        print('show requires 1 args')
+        sys.exit(1)
+    pp.pprint(client.show(eval(args[0]),))
+
+elif cmd == 'hello':
+    if len(args) != 2:
+        print('hello requires 2 args')
+        sys.exit(1)
+    pp.pprint(client.hello(eval(args[0]), eval(args[1]),))
+
+elif cmd == 'alive':
+    if len(args) != 1:
+        print('alive requires 1 args')
+        sys.exit(1)
+    pp.pprint(client.alive(eval(args[0]),))
+
+elif cmd == 'update':
+    if len(args) != 1:
+        print('update requires 1 args')
+        sys.exit(1)
+    pp.pprint(client.update(eval(args[0]),))
+
+elif cmd == 'upgrade':
+    if len(args) != 2:
+        print('upgrade requires 2 args')
+        sys.exit(1)
+    pp.pprint(client.upgrade(eval(args[0]), eval(args[1]),))
 
 else:
     print('Unrecognized method %s' % cmd)

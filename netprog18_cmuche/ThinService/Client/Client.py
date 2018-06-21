@@ -27,9 +27,9 @@ clientConnector = ClientConnector()
 try:
     clientConnector.connectToServer()
     print("Successfully connected to the server.")
-
-    clientConnector.login(getClientInfo())
-    print("Logged in on the server.")
 except:
     print("Could not connect to the server!")
+
+clientConnector.login(getClientInfo())
+print("Logged in on the server.")
 
