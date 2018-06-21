@@ -1,4 +1,5 @@
 from ThinService.Common import Constants
+from ThinService.Common.Logger import Logger
 from ThinService.Server.RequestHandler import RequestHandler
 from ThinService.Server.ServerService import ServerService
 
@@ -9,10 +10,11 @@ def printInitMessage():
     print("=====================")
 
 
+logger = Logger("Server")
 requestHandler = RequestHandler()
 serverService = ServerService(requestHandler)
 
 printInitMessage()
 
-print("Starting server...")
+logger.log("Starting server...")
 serverService.startServer()
