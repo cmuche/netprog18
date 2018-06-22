@@ -33,3 +33,5 @@ except:
 clientConnector.login(getClientInfo())
 print("Logged in on the server.")
 
+packages = clientConnector.update()
+print(packages)
