@@ -14,7 +14,7 @@ struct Package
 {
     1: required int id;
     2: required string name;
-    3: required string version;
+    3: required int version;
     4: required string checksum;
     5: required string url;
     6: required long date;

@@ -142,8 +142,8 @@ class Package(object):
                 else:
                     iprot.skip(ftype)
             elif fid == 3:
-                if ftype == TType.STRING:
-                    self.version = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                if ftype == TType.I32:
+                    self.version = iprot.readI32()
                 else:
                     iprot.skip(ftype)
             elif fid == 4:
@@ -185,8 +185,8 @@ class Package(object):
             oprot.writeString(self.name.encode('utf-8') if sys.version_info[0] == 2 else self.name)
             oprot.writeFieldEnd()
         if self.version is not None:
-            oprot.writeFieldBegin('version', TType.STRING, 3)
-            oprot.writeString(self.version.encode('utf-8') if sys.version_info[0] == 2 else self.version)
+            oprot.writeFieldBegin('version', TType.I32, 3)
+            oprot.writeI32(self.version)
             oprot.writeFieldEnd()
         if self.checksum is not None:
             oprot.writeFieldBegin('checksum', TType.STRING, 4)
@@ -246,7 +246,7 @@ Package.thrift_spec = (
     None,  # 0
     (1, TType.I32, 'id', None, None, ),  # 1
     (2, TType.STRING, 'name', 'UTF8', None, ),  # 2
-    (3, TType.STRING, 'version', 'UTF8', None, ),  # 3
+    (3, TType.I32, 'version', None, None, ),  # 3
     (4, TType.STRING, 'checksum', 'UTF8', None, ),  # 4
     (5, TType.STRING, 'url', 'UTF8', None, ),  # 5
     (6, TType.I64, 'date', None, None, ),  # 6
