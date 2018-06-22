@@ -1,3 +1,4 @@
+from ThinService.Common.Errors.ClientAlreadyRegisteredError import ClientAlreadyRegisteredError
 from ThinService.Server.Model.ClientList import ClientList
 from ThinService.Common.Logger import Logger
 from ThinService.Server.UpdateManager import UpdateManager
@@ -15,7 +16,10 @@ class ServerLogic:
 
     def hello(self, clientId, clientInfo):
         self.logger.logRequest("hello", "id: %d info: %s" % (clientId, clientInfo))
-        self.clientList.registerClient(clientId, clientInfo)
+        if self.clientList.isClientRegistered(clientId):
+            raise ClientAlreadyRegisteredError()
+        else:
+            self.clientList.registerClient(clientId, clientInfo)
 
     def update(self, clientId):
         self.logger.logRequest("update", "id: %d" % clientId)

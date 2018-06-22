@@ -1,0 +1,2 @@
+class ClientAlreadyRegisteredError(Exception):
+    pass

@@ -14,5 +14,8 @@ class ClientList:
         self.clients[clientId] = Client(clientId, clientInfo)
         self.logger.log("Registered client with id %d" % clientId)
 
+    def isClientRegistered(self, id):
+        return id in self.clients.keys()
+
     def getIds(self):
         return self.clients.keys()
