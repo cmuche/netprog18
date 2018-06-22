@@ -25,3 +25,6 @@ class ClientConnector:
 
     def login(self, clientInfo):
         self.client.hello(self.id, clientInfo)
+
+    def update(self):
+        return self.client.update(self.id)

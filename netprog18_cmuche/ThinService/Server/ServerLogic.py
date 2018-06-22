@@ -12,3 +12,7 @@ class ServerLogic:
     def hello(self, clientId, clientInfo):
         self.logger.logRequest("hello", "id: %d info: %s" % (clientId, clientInfo))
         self.clientList.registerClient(clientId, clientInfo)
+
+    def update(self, clientId):
+        self.logger.logRequest("update", "id: %d" % clientId)
+        return self.updateManager.packages
