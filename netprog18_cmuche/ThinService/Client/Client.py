@@ -1,6 +1,7 @@
 import platform
 
 from ThinService.Client.ClientService import ClientService
+from ThinService.Client.CommandInterpreter import CommandInterpreter
 from ThinService.Common import Constants
 from ThinService.Common.Logger import Logger
 from netprog18.ttypes import ClientInfo
@@ -35,11 +36,9 @@ except:
 clientService.login(getClientInfo())
 logger.log("Logged in on the server.")
 
-clients = clientConnector.list()
-print(clients)
+commandInterpreter = CommandInterpreter(clientService)
 
-packages = clientConnector.update()
-print(packages)
-
-clientInfo = clientConnector.show(clientConnector.id)
-print(clientInfo)
+while 1:
+    print()
+    command = input("Enter command: ")
+    commandInterpreter.executeCommand(command)
