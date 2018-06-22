@@ -10,7 +10,7 @@ from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 
 
-class ClientConnector:
+class ClientService:
     def __init__(self):
         self.logger = Logger("ClientConnector")
         self.id = random.randint(0, 2147483647)
