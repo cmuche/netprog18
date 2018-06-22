@@ -19,3 +19,6 @@ class ClientList:
 
     def getIds(self):
         return self.clients.keys()
+
+    def getClient(self, id):
+        return self.clients[id]

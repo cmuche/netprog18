@@ -40,3 +40,6 @@ print(clients)
 
 packages = clientConnector.update()
 print(packages)
+
+clientInfo = clientConnector.show(clientConnector.id)
+print(clientInfo)

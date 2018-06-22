@@ -29,6 +29,9 @@ class ClientConnector:
     def list(self):
         return self.client.listClients()
 
+    def show(self, id):
+        return self.client.show(id)
+
     def login(self, clientInfo):
         self.client.hello(self.id, clientInfo)
 
