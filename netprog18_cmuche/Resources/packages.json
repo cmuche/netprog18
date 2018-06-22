@@ -1,0 +1,11 @@
+[
+  {
+    "id" : "1",
+    "name": "1.0.0",
+    "version": 100,
+    "checksum": "123456789",
+    "url": "http://foo.bar",
+	"date": 1529665021,
+	"dependency": "Python"
+  }
+]

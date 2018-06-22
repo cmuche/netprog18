@@ -9,12 +9,11 @@ def printInitMessage():
     print("Port: %d" % Constants.SERVER_PORT)
     print("=====================")
 
+printInitMessage()
 
 logger = Logger("Server")
 serverLogic = ServerLogic()
 serverService = ServerService(serverLogic)
-
-printInitMessage()
 
 logger.log("Starting server...")
 serverService.startServer()

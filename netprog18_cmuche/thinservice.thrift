@@ -18,7 +18,7 @@ struct Package
     4: required string checksum;
     5: required string url;
     6: required long date;
-    7: required list<string> dependency;
+    7: required string dependency;
 }
 
 service ThinService

@@ -162,13 +162,8 @@ class Package(object):
                 else:
                     iprot.skip(ftype)
             elif fid == 7:
-                if ftype == TType.LIST:
-                    self.dependency = []
-                    (_etype3, _size0) = iprot.readListBegin()
-                    for _i4 in range(_size0):
-                        _elem5 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
-                        self.dependency.append(_elem5)
-                    iprot.readListEnd()
+                if ftype == TType.STRING:
+                    self.dependency = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             else:
@@ -206,11 +201,8 @@ class Package(object):
             oprot.writeI64(self.date)
             oprot.writeFieldEnd()
         if self.dependency is not None:
-            oprot.writeFieldBegin('dependency', TType.LIST, 7)
-            oprot.writeListBegin(TType.STRING, len(self.dependency))
-            for iter6 in self.dependency:
-                oprot.writeString(iter6.encode('utf-8') if sys.version_info[0] == 2 else iter6)
-            oprot.writeListEnd()
+            oprot.writeFieldBegin('dependency', TType.STRING, 7)
+            oprot.writeString(self.dependency.encode('utf-8') if sys.version_info[0] == 2 else self.dependency)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -258,7 +250,7 @@ Package.thrift_spec = (
     (4, TType.STRING, 'checksum', 'UTF8', None, ),  # 4
     (5, TType.STRING, 'url', 'UTF8', None, ),  # 5
     (6, TType.I64, 'date', None, None, ),  # 6
-    (7, TType.LIST, 'dependency', (TType.STRING, 'UTF8', False), None, ),  # 7
+    (7, TType.STRING, 'dependency', 'UTF8', None, ),  # 7
 )
 fix_spec(all_structs)
 del all_structs
