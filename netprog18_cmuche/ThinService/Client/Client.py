@@ -2,6 +2,7 @@ import platform
 
 from ThinService.Client.ClientService import ClientConnector
 from ThinService.Common import Constants
+from ThinService.Common.Logger import Logger
 from netprog18.ttypes import ClientInfo
 
 
@@ -23,15 +24,16 @@ def printInitMessage():
 
 printInitMessage()
 
+logger = Logger("Client")
 clientConnector = ClientConnector()
 try:
     clientConnector.connectToServer()
-    print("Successfully connected to the server.")
+    logger.log("Successfully connected to the server.")
 except:
-    print("Could not connect to the server!")
+    logger.log("Could not connect to the server!")
 
 clientConnector.login(getClientInfo())
-print("Logged in on the server.")
+logger.log("Logged in on the server.")
 
 packages = clientConnector.update()
 print(packages)
