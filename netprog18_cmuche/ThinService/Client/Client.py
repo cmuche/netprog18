@@ -35,5 +35,8 @@ except:
 clientConnector.login(getClientInfo())
 logger.log("Logged in on the server.")
 
+clients = clientConnector.list()
+print(clients)
+
 packages = clientConnector.update()
 print(packages)

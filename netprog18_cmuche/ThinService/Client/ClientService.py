@@ -26,6 +26,9 @@ class ClientConnector:
     def closeConnection(self):
         self.transport.close()
 
+    def list(self):
+        return self.client.listClients()
+
     def login(self, clientInfo):
         self.client.hello(self.id, clientInfo)
 

@@ -9,6 +9,10 @@ class ServerLogic:
         self.clientList = ClientList()
         self.updateManager = UpdateManager()
 
+    def listClients(self):
+        self.logger.logRequest("list clients", "")
+        return self.clientList.getIds()
+
     def hello(self, clientId, clientInfo):
         self.logger.logRequest("hello", "id: %d info: %s" % (clientId, clientInfo))
         self.clientList.registerClient(clientId, clientInfo)

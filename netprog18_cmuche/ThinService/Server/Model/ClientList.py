@@ -13,3 +13,6 @@ class ClientList:
     def registerClient(self, clientId, clientInfo):
         self.clients[clientId] = Client(clientId, clientInfo)
         self.logger.log("Registered client with id %d" % clientId)
+
+    def getIds(self):
+        return self.clients.keys()
