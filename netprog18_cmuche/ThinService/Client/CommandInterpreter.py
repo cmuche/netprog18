@@ -1,3 +1,5 @@
+import sys
+
 from ThinService.Common.Logger import Logger
 
 
@@ -8,6 +10,11 @@ class CommandInterpreter:
 
     def executeCommand(self, commandString):
         self.logger.log("Executing command '%s'" % commandString)
+
+        if commandString == "quit":
+            self.logger.log("Goodbye.")
+            sys.exit()
+
         try:
             method = getattr(self.clientService, commandString)
             result = method()
