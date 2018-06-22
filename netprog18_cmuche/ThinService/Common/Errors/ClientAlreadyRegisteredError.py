@@ -1,2 +1,0 @@
-class ClientAlreadyRegisteredError(Exception):
-    pass

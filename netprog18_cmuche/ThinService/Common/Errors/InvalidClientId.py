@@ -1,2 +1,0 @@
-class InvalidClientId(Exception):
-    pass

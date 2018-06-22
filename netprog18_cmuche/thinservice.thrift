@@ -21,11 +21,19 @@ struct Package
     7: required string dependency;
 }
 
+exception ClientAlreadyRegisteredError
+{
+}
+
+exception InvalidClientId
+{
+}
+
 service ThinService
 {
 	list<int> listClients()
-	ClientInfo show(1:int clientId)
-	void hello(1:int clientId, 2:ClientInfo clientInfo)
+	ClientInfo show(1:int clientId) throws (1:InvalidClientId err)
+	void hello(1:int clientId, 2:ClientInfo clientInfo) throws (1:ClientAlreadyRegisteredError err)
 	void alive(1:int clientId)
 
 	list<Package> update(1:int clientId)

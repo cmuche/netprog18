@@ -122,6 +122,8 @@ class Client(Iface):
         iprot.readMessageEnd()
         if result.success is not None:
             return result.success
+        if result.err is not None:
+            raise result.err
         raise TApplicationException(TApplicationException.MISSING_RESULT, "show failed: unknown result")
 
     def hello(self, clientId, clientInfo):
@@ -153,6 +155,8 @@ class Client(Iface):
         result = hello_result()
         result.read(iprot)
         iprot.readMessageEnd()
+        if result.err is not None:
+            raise result.err
         return
 
     def alive(self, clientId):
@@ -306,6 +310,9 @@ class Processor(Iface, TProcessor):
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
+        except InvalidClientId as err:
+            msg_type = TMessageType.REPLY
+            result.err = err
         except TApplicationException as ex:
             logging.exception('TApplication exception in handler')
             msg_type = TMessageType.EXCEPTION
@@ -329,6 +336,9 @@ class Processor(Iface, TProcessor):
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
+        except ClientAlreadyRegisteredError as err:
+            msg_type = TMessageType.REPLY
+            result.err = err
         except TApplicationException as ex:
             logging.exception('TApplication exception in handler')
             msg_type = TMessageType.EXCEPTION
@@ -590,11 +600,13 @@ class show_result(object):
     """
     Attributes:
      - success
+     - err
     """
 
 
-    def __init__(self, success=None,):
+    def __init__(self, success=None, err=None,):
         self.success = success
+        self.err = err
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -611,6 +623,12 @@ class show_result(object):
                     self.success.read(iprot)
                 else:
                     iprot.skip(ftype)
+            elif fid == 1:
+                if ftype == TType.STRUCT:
+                    self.err = InvalidClientId()
+                    self.err.read(iprot)
+                else:
+                    iprot.skip(ftype)
             else:
                 iprot.skip(ftype)
             iprot.readFieldEnd()
@@ -624,6 +642,10 @@ class show_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.STRUCT, 0)
             self.success.write(oprot)
+            oprot.writeFieldEnd()
+        if self.err is not None:
+            oprot.writeFieldBegin('err', TType.STRUCT, 1)
+            self.err.write(oprot)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -644,6 +666,7 @@ class show_result(object):
 all_structs.append(show_result)
 show_result.thrift_spec = (
     (0, TType.STRUCT, 'success', [ClientInfo, None], None, ),  # 0
+    (1, TType.STRUCT, 'err', [InvalidClientId, None], None, ),  # 1
 )
 
 
@@ -722,7 +745,14 @@ hello_args.thrift_spec = (
 
 
 class hello_result(object):
+    """
+    Attributes:
+     - err
+    """
 
+
+    def __init__(self, err=None,):
+        self.err = err
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -733,6 +763,12 @@ class hello_result(object):
             (fname, ftype, fid) = iprot.readFieldBegin()
             if ftype == TType.STOP:
                 break
+            if fid == 1:
+                if ftype == TType.STRUCT:
+                    self.err = ClientAlreadyRegisteredError()
+                    self.err.read(iprot)
+                else:
+                    iprot.skip(ftype)
             else:
                 iprot.skip(ftype)
             iprot.readFieldEnd()
@@ -743,6 +779,10 @@ class hello_result(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('hello_result')
+        if self.err is not None:
+            oprot.writeFieldBegin('err', TType.STRUCT, 1)
+            self.err.write(oprot)
+            oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
 
@@ -761,6 +801,8 @@ class hello_result(object):
         return not (self == other)
 all_structs.append(hello_result)
 hello_result.thrift_spec = (
+    None,  # 0
+    (1, TType.STRUCT, 'err', [ClientAlreadyRegisteredError, None], None, ),  # 1
 )
 
 

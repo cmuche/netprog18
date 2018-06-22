@@ -1,8 +1,7 @@
-from ThinService.Common.Errors.ClientAlreadyRegisteredError import ClientAlreadyRegisteredError
-from ThinService.Common.Errors.InvalidClientId import InvalidClientId
 from ThinService.Server.Model.ClientList import ClientList
 from ThinService.Common.Logger import Logger
 from ThinService.Server.UpdateManager import UpdateManager
+from netprog18.ttypes import InvalidClientId, ClientAlreadyRegisteredError
 
 
 class ServerLogic:
