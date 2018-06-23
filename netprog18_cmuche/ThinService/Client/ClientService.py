@@ -1,5 +1,4 @@
 import random
-import sys
 
 from ThinService.Common import Constants
 from ThinService.Common.Logger import Logger
