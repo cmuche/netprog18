@@ -1,3 +1,5 @@
+import time
+
 from ThinService.Common.Logger import Logger
 from ThinService.Server.Model.Client import Client
 
@@ -12,7 +14,13 @@ class ClientList:
 
     def registerClient(self, clientId, clientInfo):
         self.clients[clientId] = Client(clientId, clientInfo)
+        self.updateLastSeen(clientId)
         self.logger.log("Registered client with id %d" % clientId)
+
+    def updateLastSeen(self, id):
+        timestamp = time.time()
+        self.clients[id].lastSeen = timestamp
+        self.logger.log("Updated lastSeen for client %d to %d" % (id, timestamp))
 
     def isClientRegistered(self, id):
         return id in self.clients.keys()

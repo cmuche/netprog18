@@ -27,6 +27,12 @@ class ServerLogic:
         else:
             self.clientList.registerClient(clientId, clientInfo)
 
+    def alive(self, clientId):
+        self.logger.logRequest("alive", "id: %d" % clientId)
+        if not self.clientList.isClientRegistered(clientId):
+            raise InvalidClientId()
+        self.clientList.updateLastSeen(clientId)
+
     def update(self, clientId):
         self.logger.logRequest("update", "id: %d" % clientId)
         return self.updateManager.packages

@@ -38,5 +38,8 @@ class ClientService:
     def login(self, clientInfo):
         self.client.hello(self.id, clientInfo)
 
+    def alive(self):
+        self.client.alive(self.id)
+
     def update(self):
         return self.client.update(self.id)
