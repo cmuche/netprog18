@@ -29,6 +29,10 @@ exception InvalidClientId
 {
 }
 
+exception InvalidPackageId
+{
+}
+
 service ThinService
 {
 	list<int> listClients()
