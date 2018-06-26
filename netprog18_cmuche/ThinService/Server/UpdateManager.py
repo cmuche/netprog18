@@ -20,7 +20,6 @@ class UpdateManager:
             package.name = jsonPackage["name"]
             package.version = jsonPackage["version"]
             package.checksum = jsonPackage["checksum"]
-            package.url = jsonPackage["url"]
             package.date = jsonPackage["date"]
             package.dependency = jsonPackage["dependency"]
             self.packages.append(package)
