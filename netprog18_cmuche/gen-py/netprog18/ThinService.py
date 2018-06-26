@@ -226,7 +226,7 @@ class Client(Iface):
          - packageId
         """
         self.send_upgrade(clientId, packageId)
-        self.recv_upgrade()
+        return self.recv_upgrade()
 
     def send_upgrade(self, clientId, packageId):
         self._oprot.writeMessageBegin('upgrade', TMessageType.CALL, self._seqid)
@@ -248,7 +248,9 @@ class Client(Iface):
         result = upgrade_result()
         result.read(iprot)
         iprot.readMessageEnd()
-        return
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "upgrade failed: unknown result")
 
 
 class Processor(Iface, TProcessor):
@@ -404,7 +406,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = upgrade_result()
         try:
-            self._handler.upgrade(args.clientId, args.packageId)
+            result.success = self._handler.upgrade(args.clientId, args.packageId)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -1114,7 +1116,14 @@ upgrade_args.thrift_spec = (
 
 
 class upgrade_result(object):
+    """
+    Attributes:
+     - success
+    """
 
+
+    def __init__(self, success=None,):
+        self.success = success
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -1125,6 +1134,11 @@ class upgrade_result(object):
             (fname, ftype, fid) = iprot.readFieldBegin()
             if ftype == TType.STOP:
                 break
+            if fid == 0:
+                if ftype == TType.STRING:
+                    self.success = iprot.readBinary()
+                else:
+                    iprot.skip(ftype)
             else:
                 iprot.skip(ftype)
             iprot.readFieldEnd()
@@ -1135,6 +1149,10 @@ class upgrade_result(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('upgrade_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.STRING, 0)
+            oprot.writeBinary(self.success)
+            oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
 
@@ -1153,6 +1171,7 @@ class upgrade_result(object):
         return not (self == other)
 all_structs.append(upgrade_result)
 upgrade_result.thrift_spec = (
+    (0, TType.STRING, 'success', 'BINARY', None, ),  # 0
 )
 fix_spec(all_structs)
 del all_structs

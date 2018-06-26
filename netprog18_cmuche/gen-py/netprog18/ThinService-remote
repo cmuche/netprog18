@@ -29,7 +29,7 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
     print('  void hello(int clientId, ClientInfo clientInfo)')
     print('  void alive(int clientId)')
     print('   update(int clientId)')
-    print('  void upgrade(int clientId, int packageId)')
+    print('  string upgrade(int clientId, int packageId)')
     print('')
     sys.exit(0)
 
