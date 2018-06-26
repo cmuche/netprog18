@@ -1,7 +1,7 @@
 import json
 
 from ThinService.Common.Logger import Logger
-from netprog18.ttypes import Package
+from netprog18.ttypes import Package, InvalidPackageId
 
 
 class UpdateManager:
@@ -12,6 +12,16 @@ class UpdateManager:
             data = json.load(f)
             self.parsePackages(data)
         self.logger.log("Found %d package(s)" % len(self.packages))
+
+    def getPackageById(self, packageId):
+        for p in self.packages:
+            if p.id == packageId:
+                return p
+        raise InvalidPackageId()
+
+    def getPackageFile(self, packageId):
+        package = self.getPackageById(packageId)
+        return "Packages/%d.zip" % package.id
 
     def parsePackages(self, jsonData):
         for jsonPackage in jsonData:
