@@ -6,6 +6,7 @@ from thrift.transport import TTransport
 
 from ThinService.Common import Constants
 from ThinService.Common.Logger import Logger
+from UpgradeManager import UpgradeManager
 from netprog18 import ThinService
 
 
@@ -13,6 +14,7 @@ class ClientService:
     def __init__(self):
         self.logger = Logger("ClientConnector")
         self.id = self.calculateClientId()
+        self.upgradeManager = UpgradeManager()
         self.logger.log("Client id: %d" % self.id)
 
     def calculateClientId(self):
@@ -45,8 +47,4 @@ class ClientService:
 
     def upgrade(self, packageId):
         data = self.client.upgrade(self.id, packageId)
-        fileName = "package-%d-%d.zip" % (self.id, packageId)
-        file = open(fileName, "wb")
-        file.write(data)
-        file.close()
-        self.logger.log("Received package from server. File: %s" % fileName)
+        self.upgradeManager.applyUpgrade(self.id, packageId, data)
