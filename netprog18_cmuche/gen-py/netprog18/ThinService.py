@@ -250,6 +250,8 @@ class Client(Iface):
         iprot.readMessageEnd()
         if result.success is not None:
             return result.success
+        if result.err is not None:
+            raise result.err
         raise TApplicationException(TApplicationException.MISSING_RESULT, "upgrade failed: unknown result")
 
 
@@ -410,6 +412,9 @@ class Processor(Iface, TProcessor):
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
+        except InvalidPackageId as err:
+            msg_type = TMessageType.REPLY
+            result.err = err
         except TApplicationException as ex:
             logging.exception('TApplication exception in handler')
             msg_type = TMessageType.EXCEPTION
@@ -1119,11 +1124,13 @@ class upgrade_result(object):
     """
     Attributes:
      - success
+     - err
     """
 
 
-    def __init__(self, success=None,):
+    def __init__(self, success=None, err=None,):
         self.success = success
+        self.err = err
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -1139,6 +1146,12 @@ class upgrade_result(object):
                     self.success = iprot.readBinary()
                 else:
                     iprot.skip(ftype)
+            elif fid == 1:
+                if ftype == TType.STRUCT:
+                    self.err = InvalidPackageId()
+                    self.err.read(iprot)
+                else:
+                    iprot.skip(ftype)
             else:
                 iprot.skip(ftype)
             iprot.readFieldEnd()
@@ -1152,6 +1165,10 @@ class upgrade_result(object):
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.STRING, 0)
             oprot.writeBinary(self.success)
+            oprot.writeFieldEnd()
+        if self.err is not None:
+            oprot.writeFieldBegin('err', TType.STRUCT, 1)
+            self.err.write(oprot)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -1172,6 +1189,7 @@ class upgrade_result(object):
 all_structs.append(upgrade_result)
 upgrade_result.thrift_spec = (
     (0, TType.STRING, 'success', 'BINARY', None, ),  # 0
+    (1, TType.STRUCT, 'err', [InvalidPackageId, None], None, ),  # 1
 )
 fix_spec(all_structs)
 del all_structs

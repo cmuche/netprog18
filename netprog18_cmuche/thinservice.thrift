@@ -41,5 +41,5 @@ service ThinService
 	void alive(1:int clientId)
 
 	list<Package> update(1:int clientId)
-	binary upgrade(1:int clientId, 2:int packageId)
+	binary upgrade(1:int clientId, 2:int packageId) throws (1:InvalidPackageId err)
 }
