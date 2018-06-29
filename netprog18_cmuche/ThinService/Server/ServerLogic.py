@@ -36,3 +36,10 @@ class ServerLogic:
     def update(self, clientId):
         self.logger.logRequest("update", "id: %d" % clientId)
         return self.updateManager.packages
+
+    def upgrade(self, clientId, packageId):
+        self.logger.logRequest("upgrade", "id: %d package: %d" % (clientId, packageId))
+        fileName = self.updateManager.getPackageFile(packageId)
+        with open(fileName, "rb") as file:
+            data = file.read()
+            return data

@@ -43,3 +43,11 @@ class ClientService:
 
     def update(self):
         return self.client.update(self.id)
+
+    def upgrade(self, packageId):
+        data = self.client.upgrade(self.id, packageId)
+        fileName = "package-%d-%d.zip" % (self.id, packageId)
+        file = open(fileName, "wb")
+        file.write(data)
+        file.close()
+        self.logger.log("Received package from server. File: %s" % fileName)
