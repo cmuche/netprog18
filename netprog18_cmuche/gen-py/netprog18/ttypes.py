@@ -100,6 +100,91 @@ class ClientInfo(object):
         return not (self == other)
 
 
+class ClientDetails(object):
+    """
+    Attributes:
+     - info
+     - packageId
+     - lastSeen
+    """
+
+
+    def __init__(self, info=None, packageId=None, lastSeen=None,):
+        self.info = info
+        self.packageId = packageId
+        self.lastSeen = lastSeen
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRUCT:
+                    self.info = ClientInfo()
+                    self.info.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.I32:
+                    self.packageId = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 3:
+                if ftype == TType.I64:
+                    self.lastSeen = iprot.readI64()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('ClientDetails')
+        if self.info is not None:
+            oprot.writeFieldBegin('info', TType.STRUCT, 1)
+            self.info.write(oprot)
+            oprot.writeFieldEnd()
+        if self.packageId is not None:
+            oprot.writeFieldBegin('packageId', TType.I32, 2)
+            oprot.writeI32(self.packageId)
+            oprot.writeFieldEnd()
+        if self.lastSeen is not None:
+            oprot.writeFieldBegin('lastSeen', TType.I64, 3)
+            oprot.writeI64(self.lastSeen)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        if self.info is None:
+            raise TProtocolException(message='Required field info is unset!')
+        if self.packageId is None:
+            raise TProtocolException(message='Required field packageId is unset!')
+        if self.lastSeen is None:
+            raise TProtocolException(message='Required field lastSeen is unset!')
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
 class Package(object):
     """
     Attributes:
@@ -369,6 +454,13 @@ ClientInfo.thrift_spec = (
     (1, TType.STRING, 'cpu', 'UTF8', None, ),  # 1
     (2, TType.STRING, 'gpu', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'ram', 'UTF8', None, ),  # 3
+)
+all_structs.append(ClientDetails)
+ClientDetails.thrift_spec = (
+    None,  # 0
+    (1, TType.STRUCT, 'info', [ClientInfo, None], None, ),  # 1
+    (2, TType.I32, 'packageId', None, None, ),  # 2
+    (3, TType.I64, 'lastSeen', None, None, ),  # 3
 )
 all_structs.append(Package)
 Package.thrift_spec = (
