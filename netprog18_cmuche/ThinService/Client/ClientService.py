@@ -1,13 +1,12 @@
-import random
 import uuid
+
+from thrift.protocol import TBinaryProtocol
+from thrift.transport import TSocket
+from thrift.transport import TTransport
 
 from ThinService.Common import Constants
 from ThinService.Common.Logger import Logger
 from netprog18 import ThinService
-
-from thrift.transport import TSocket
-from thrift.transport import TTransport
-from thrift.protocol import TBinaryProtocol
 
 
 class ClientService:
@@ -17,7 +16,7 @@ class ClientService:
         self.logger.log("Client id: %d" % self.id)
 
     def calculateClientId(self):
-        return int(uuid.getnode()/1000000)
+        return int(uuid.getnode() / 1000000)
 
     def connectToServer(self):
         self.transport = TSocket.TSocket(Constants.SERVER_HOST, Constants.SERVER_PORT)
