@@ -103,3 +103,4 @@ venv.bak/
 # mypy
 .mypy_cache/
 netprog18_cmuche/.idea/
+netprog18_cmuche/client-package-tmp/
