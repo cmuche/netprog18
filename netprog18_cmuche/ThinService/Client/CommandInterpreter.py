@@ -25,6 +25,11 @@ class CommandInterpreter:
         try:
             method = getattr(self.clientService, commandParts[0])
             params = self.getParamsList(commandParts)
+        except:
+            self.printError("Invalid command!")
+            return
+
+        try:
             result = method(*params)
             print("Result = %s" % result)
         except ClientAlreadyRegisteredError:
@@ -34,7 +39,8 @@ class CommandInterpreter:
         except InvalidPackageId:
             self.printError("This package id does not exist!")
         except:
-            self.logger.log("Invalid command!")
+            self.logger.log("Error executing command!")
+            raise
 
     def printError(self, err):
         print("Error = %s" % err)
