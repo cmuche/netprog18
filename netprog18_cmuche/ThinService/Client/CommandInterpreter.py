@@ -1,7 +1,7 @@
 import sys
 
 from ThinService.Common.Logger import Logger
-from netprog18.ttypes import ClientAlreadyRegisteredError, InvalidClientId
+from netprog18.ttypes import ClientAlreadyRegisteredError, InvalidClientId, InvalidPackageId
 
 
 class CommandInterpreter:
@@ -31,6 +31,8 @@ class CommandInterpreter:
             self.printError("A client with the same id is already registered on the server!")
         except InvalidClientId:
             self.printError("This client id does not exist!")
+        except InvalidPackageId:
+            self.printError("This package id does not exist!")
         except:
             self.logger.log("Invalid command!")
 
