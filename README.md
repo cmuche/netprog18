@@ -29,8 +29,39 @@ In some cases you have to specify the sources path in your ```PYTHONPATH``` or `
 ### Package management
 ...
 
-## Thrift documentation
-...
+## Thrift file
+See [this PDF](http://bibiserv.cebitec.uni-bielefeld.de/resources/lehre/netprog18/Projekt-2018.pdf) as an example.
+The ```thinservice.thrift``` file defines the API.
+
+```
+list<int> listClients()
+```
+Lists all client IDs which are active at the moment
+
+```
+ClientDetails show(1:int clientId) throws (1:InvalidClientId err)
+```
+Shows details and client (hardware) information für a client id. Throws an exception if the client id is not registered at all. Shows information also for inactive clients
+
+```
+void hello(1:int clientId, 2:ClientInfo clientInfo) throws (1:ClientAlreadyRegisteredError err)
+```
+Registers a client on the server and sends the client hardware info along. Throws an exception if the client id is already registered and the connected client is active. Re-registers the new client if the connected client is inactive
+
+```
+void alive(1:int clientId)
+```
+Updates the lastSeen attribute on the server
+
+```
+list<Package> update(1:int clientId)
+```
+Gets a list of all available packages and their information
+
+```
+binary upgrade(1:int clientId, 2:int packageId) throws (1:InvalidPackageId err)
+```
+Downloads the package archive for the given package id and informs the server about the new package id
 
 ## Example usage
 ### Upgrade and package info
