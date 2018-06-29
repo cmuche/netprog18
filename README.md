@@ -19,15 +19,9 @@ In some cases you have to specify the sources path in your ```PYTHONPATH``` or `
 ```python ThinService/Client/Client.py```
 
 ### Control the client
-...
+When the client module is run it tries to connect to the server and to perform a login. If these steps were successful it asks for a command to execute. (See: Example usage)
 
-## Internals
-
-### Client login
-...
-
-### Package management
-...
+The ```quit``` command terminates the client.
 
 ## Thrift file
 See [this PDF](http://bibiserv.cebitec.uni-bielefeld.de/resources/lehre/netprog18/Projekt-2018.pdf) as an example.
