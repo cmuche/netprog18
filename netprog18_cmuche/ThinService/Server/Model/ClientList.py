@@ -29,12 +29,12 @@ class ClientList:
     def getActiveIds(self):
         ret = []
         for client in self.clients:
-            if self.clientIsActive(self.getClient(client)):
+            if self.isClientActive(self.getClient(client)):
                 ret.append(client)
         return ret
 
     def getClient(self, id):
         return self.clients[id]
 
-    def clientIsActive(self, client):
+    def isClientActive(self, client):
         return client.lastSeen >= (time.time() - Constants.SERVER_LASTSEEN_THRESHOLD)
