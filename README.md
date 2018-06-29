@@ -1,4 +1,10 @@
 # netprog18
+The project for the lecture netprog18.
+
+## About this project
+This project consist of a server and a client module for a thin client software architecture.
+It is written in Python 3 and uses Apache Thrift for communication and API definition.
+
 ## Example usage
 ### Upgrade and package info
 ```
