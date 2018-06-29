@@ -1,5 +1,6 @@
 import time
 
+import Constants
 from ThinService.Common.Logger import Logger
 from ThinService.Server.Model.Client import Client
 
@@ -25,8 +26,15 @@ class ClientList:
     def isClientRegistered(self, id):
         return id in self.clients.keys()
 
-    def getIds(self):
-        return self.clients.keys()
+    def getActiveIds(self):
+        ret = []
+        for client in self.clients:
+            if self.clientIsActive(self.getClient(client)):
+                ret.append(client)
+        return ret
 
     def getClient(self, id):
         return self.clients[id]
+
+    def clientIsActive(self, client):
+        return client.lastSeen >= (time.time() - Constants.SERVER_LASTSEEN_THRESHOLD)

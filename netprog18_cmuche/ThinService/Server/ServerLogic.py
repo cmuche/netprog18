@@ -12,7 +12,7 @@ class ServerLogic:
 
     def listClients(self):
         self.logger.logRequest("list clients", "")
-        return self.clientList.getIds()
+        return self.clientList.getActiveIds()
 
     def show(self, clientId):
         self.logger.logRequest("show client", "id: %d" % clientId)
