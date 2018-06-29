@@ -7,8 +7,16 @@ It is written in Python 3 and uses Apache Thrift for communication and API defin
 
 ## How to use
 
+The workspace directory is ```netprog18_cmuche```.
+In some cases you have to specify the sources path in your ```PYTHONPATH``` or ```PYTHONHOME``` environment variable.
+
 ### Run the modules
-...
+
+#### Server
+```python ThinService/Server/Server.py```
+
+#### Client
+```python ThinService/Client/Client.py```
 
 ### Control the client
 ...
