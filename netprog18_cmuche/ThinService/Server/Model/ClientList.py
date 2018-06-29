@@ -3,6 +3,7 @@ import time
 import Constants
 from ThinService.Common.Logger import Logger
 from ThinService.Server.Model.Client import Client
+from netprog18.ttypes import ClientDetails
 
 
 class ClientList:
@@ -15,13 +16,17 @@ class ClientList:
 
     def registerClient(self, clientId, clientInfo):
         self.clients[clientId] = Client(clientId, clientInfo)
-        self.updateLastSeen(clientId)
         self.logger.log("Registered client with id %d" % clientId)
+        self.updateLastSeen(clientId)
 
     def updateLastSeen(self, id):
-        timestamp = time.time()
+        timestamp = int(time.time())
         self.clients[id].lastSeen = timestamp
         self.logger.log("Updated lastSeen for client %d to %d" % (id, timestamp))
+
+    def updateCurrentPackage(self, id, packageId):
+        self.clients[id].currentPackage = packageId
+        self.logger.log("Updated currentPackage for client %d to %d" % (id, packageId))
 
     def isClientRegistered(self, id):
         return id in self.clients.keys()
@@ -36,5 +41,14 @@ class ClientList:
     def getClient(self, id):
         return self.clients[id]
 
+    def getClientDetails(self, id):
+        client = self.getClient(id)
+
+        details = ClientDetails()
+        details.info = client.info
+        details.lastSeen = client.lastSeen
+        details.packageId = client.currentPackage
+        return details
+
     def isClientActive(self, client):
-        return client.lastSeen >= (time.time() - Constants.SERVER_LASTSEEN_THRESHOLD)
+        return client.lastSeen >= (int(time.time()) - Constants.SERVER_LASTSEEN_THRESHOLD)
