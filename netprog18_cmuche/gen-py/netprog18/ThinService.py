@@ -626,7 +626,7 @@ class show_result(object):
                 break
             if fid == 0:
                 if ftype == TType.STRUCT:
-                    self.success = ClientInfo()
+                    self.success = ClientDetails()
                     self.success.read(iprot)
                 else:
                     iprot.skip(ftype)
@@ -672,7 +672,7 @@ class show_result(object):
         return not (self == other)
 all_structs.append(show_result)
 show_result.thrift_spec = (
-    (0, TType.STRUCT, 'success', [ClientInfo, None], None, ),  # 0
+    (0, TType.STRUCT, 'success', [ClientDetails, None], None, ),  # 0
     (1, TType.STRUCT, 'err', [InvalidClientId, None], None, ),  # 1
 )
 

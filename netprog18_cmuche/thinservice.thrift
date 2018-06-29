@@ -10,6 +10,13 @@ struct ClientInfo
     3: required string ram;
 }
 
+struct ClientDetails
+{
+    1: required ClientInfo info;
+    2: required int packageId;
+    3: required long lastSeen;
+}
+
 struct Package
 {
     1: required int id;
@@ -36,7 +43,7 @@ exception InvalidPackageId
 service ThinService
 {
 	list<int> listClients()
-	ClientInfo show(1:int clientId) throws (1:InvalidClientId err)
+	ClientDetails show(1:int clientId) throws (1:InvalidClientId err)
 	void hello(1:int clientId, 2:ClientInfo clientInfo) throws (1:ClientAlreadyRegisteredError err)
 	void alive(1:int clientId)
 

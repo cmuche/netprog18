@@ -3,3 +3,4 @@ class Client:
         self.id = id
         self.info = info
         self.lastSeen = -1
+        self.currentPackage = -1

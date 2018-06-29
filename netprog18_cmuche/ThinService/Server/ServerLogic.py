@@ -18,14 +18,17 @@ class ServerLogic:
         self.logger.logRequest("show client", "id: %d" % clientId)
         if not self.clientList.isClientRegistered(clientId):
             raise InvalidClientId()
-        return self.clientList.getClient(clientId).info
+        return self.clientList.getClientDetails(clientId)
 
     def hello(self, clientId, clientInfo):
         self.logger.logRequest("hello", "id: %d info: %s" % (clientId, clientInfo))
         if self.clientList.isClientRegistered(clientId):
-            raise ClientAlreadyRegisteredError()
-        else:
-            self.clientList.registerClient(clientId, clientInfo)
+            if self.clientList.isClientActive(self.clientList.getClient(clientId)):
+                raise ClientAlreadyRegisteredError()
+            else:
+                self.logger.log("Re-registering client with id %d" % clientId)
+
+        self.clientList.registerClient(clientId, clientInfo)
 
     def alive(self, clientId):
         self.logger.logRequest("alive", "id: %d" % clientId)
@@ -39,7 +42,9 @@ class ServerLogic:
 
     def upgrade(self, clientId, packageId):
         self.logger.logRequest("upgrade", "id: %d package: %d" % (clientId, packageId))
+
         fileName = self.updateManager.getPackageFile(packageId)
+        self.clientList.updateCurrentPackage(clientId, packageId)
         with open(fileName, "rb") as file:
             data = file.read()
             return data
