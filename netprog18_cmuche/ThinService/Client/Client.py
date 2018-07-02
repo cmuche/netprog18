@@ -8,6 +8,10 @@ from netprog18.ttypes import ClientInfo
 
 
 def getClientInfo():
+    """
+    Collects hardware information
+    :return: Filled ClientInfo object
+    """
     clientInfo = ClientInfo()
     clientInfo.cpu = platform.processor()
     clientInfo.gpu = "GPU"
@@ -16,6 +20,9 @@ def getClientInfo():
 
 
 def printInitMessage():
+    """
+    Prints the welcome message
+    """
     print("THINSERVICE CLIENT")
     print("Host: %s" % Constants.SERVER_HOST)
     print("Port: %d" % Constants.SERVER_PORT)

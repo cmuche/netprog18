@@ -10,6 +10,10 @@ class CommandInterpreter:
         self.clientService = clientService
 
     def executeCommand(self, commandString):
+        """
+        Interprets and executes a command string
+        :param commandString: The raw command string including parameters
+        """
         self.logger.log("Executing command '%s'" % commandString)
 
         commandParts = commandString.split(" ")
@@ -43,9 +47,18 @@ class CommandInterpreter:
             raise
 
     def printError(self, err):
+        """
+        Prints an error
+        :param err: The error string
+        """
         print("Error = %s" % err)
 
     def getParamsList(self, commandParts):
+        """
+        Extracs the parameters of a command and converts them if necessary
+        :param commandParts: The parts of the command
+        :return: List of parameters
+        """
         paramsRaw = commandParts[1:]
         params = []
         for r in paramsRaw:

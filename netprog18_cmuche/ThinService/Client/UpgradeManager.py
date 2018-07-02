@@ -9,6 +9,12 @@ class UpgradeManager:
         self.logger = Logger("UpgradeManager")
 
     def applyUpgrade(self, clientId, packageId, data):
+        """
+        Applies (installs) a package
+        :param clientId: The own client id
+        :param packageId: The id of the package
+        :param data: The package file as a binary string
+        """
         if not os.path.exists(Constants.CLIENT_PACKAGE_DIR):
             os.makedirs(Constants.CLIENT_PACKAGE_DIR)
 
