@@ -6,6 +6,9 @@ from netprog18.ttypes import Package, InvalidPackageId
 
 class UpdateManager:
     def __init__(self):
+        """
+        Initiates the UpdateManager, reads and parses the package JSON file
+        """
         self.logger = Logger("UpdateManager")
         self.packages = []
         with open("Resources/packages.json") as f:
