@@ -13,6 +13,10 @@ class ServerService:
         self.serverLogic = serverLogic
 
     def startServer(self):
+        """
+        Starts the server and sets the ServerLogic as the request listener
+        :return:
+        """
         processor = ThinService.Processor(self.serverLogic)
         serverSocket = TSocket.TServerSocket(Constants.SERVER_HOST, Constants.SERVER_PORT)
         transportFactory = TTransport.TBufferedTransportFactory()
