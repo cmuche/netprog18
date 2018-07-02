@@ -19,7 +19,7 @@ class ClientService:
 
     def calculateClientId(self):
         """
-        Calculated a unique hardware id
+        Calculates a unique hardware id
         :return: The id as an integer
         """
         return int(uuid.getnode() / 1000000)
