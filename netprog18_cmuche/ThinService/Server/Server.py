@@ -5,6 +5,9 @@ from ThinService.Server.ServerService import ServerService
 
 
 def printInitMessage():
+    """
+    Prints the welcome message
+    """
     print("THINSERVICE SERVER")
     print("Port: %d" % Constants.SERVER_PORT)
     print("=====================")
